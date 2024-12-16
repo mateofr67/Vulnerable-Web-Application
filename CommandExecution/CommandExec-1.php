@@ -1,4 +1,18 @@
-<html>
+<?php
+if (isset($_GET["username"]) && isset($_GET["password"])) 
+{
+    $username = $_GET["username"];
+    $password = $_GET["password"];
+
+    if ($username === "Admin" && $password === "ufoundmypassword") {
+        echo "WELLDONE";
+    } else {
+        echo "Invalid credentials.";
+           }
+} else {
+    echo "Username and password are required.";
+       }
+?><html>
   <head>
     <link rel="shortcut icon" href="../Resources/hmbct.png" />
     <title>CommandExec-1</title>
@@ -21,19 +35,17 @@
   </div>
   <div style="background-color:#ecf2d0;padding:20px;border-radius:0px 0px 20px 20px" align="center">
 <?php
-if (isset($_GET["username"]) && isset($_GET["password"])) 
-{
+if (isset($_GET["username"]) && isset($_GET["password"])) {
     $username = $_GET["username"];
     $password = $_GET["password"];
-
     if ($username === "Admin" && $password === "ufoundmypassword") {
         echo "WELLDONE";
     } else {
         echo "Invalid credentials.";
-           }
+    }
 } else {
     echo "Username and password are required.";
-       }
+}
 ?>
   </div>
   </body>
