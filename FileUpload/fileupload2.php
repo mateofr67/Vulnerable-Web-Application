@@ -18,26 +18,34 @@
 </form>
 	</div>
 <?php
-
 // Check if image file is a actual image or fake image
-if(isset($_POST["submit"])) {
-	$target_dir = "uploads/";
-	$target_file = $target_dir . basename($_FILES["file"]["name"]);
-	$uploadOk = 1;
-	$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-	$type = $_FILES["file"]["type"];
+if (isset($_POST["submit"])) {
+    $target_dir = "uploads/";
+    // Sanitizar el nombre del archivo y evitar caracteres peligrosos
+    $file_name = basename($_FILES["file"]["name"]);
+    $file_name = preg_replace("/[^a-zA-Z0-9\-_\.]/", "", $file_name); // Solo caracteres alfanuméricos, guiones, guiones bajos y puntos
 
-    if($type != "image/png" && $type != "image/jpeg" ){
-        echo "JPG, JPEG, PNG & GIF files are allowed.";
+    $target_file = $target_dir . $file_name;
+    $uploadOk = 1;
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    $type = $_FILES["file"]["type"];
+
+    // Verificar si el archivo es de tipo permitido
+    if ($type != "image/png" && $type != "image/jpeg") {
+        echo "Only JPG, JPEG, PNG files are allowed.";
         $uploadOk = 0;
     }
-    
-    if($uploadOk == 1){
-        move_uploaded_file($_FILES["file"]["tmp_name"], $target_file);
-        echo "File uploaded /uploads/".$_FILES["file"]["name"];
+
+    // Si la validación es exitosa, mover el archivo al directorio de destino
+    if ($uploadOk == 1) {
+        if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+            // Mostrar una respuesta segura al usuario
+            echo "File uploaded to /uploads/" . htmlspecialchars($file_name);
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
     }
 }
 ?>
-
 </body>
 </html>
