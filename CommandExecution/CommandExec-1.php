@@ -12,7 +12,8 @@ if (isset($_GET["username"]) && isset($_GET["password"]))
 } else {
     echo "Username and password are required.";
        }
-?><html>
+?>
+<html>
   <head>
     <link rel="shortcut icon" href="../Resources/hmbct.png" />
     <title>CommandExec-1</title>
