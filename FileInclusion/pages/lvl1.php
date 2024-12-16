@@ -17,15 +17,30 @@
       <a href=lvl1.php?file=2.php><button>The Other Button!</button></a>
       </div>
       
-      <?php
-        echo "</br></br>";
-        
-        if (isset( $_GET[ 'file' ]))        
-        {
-          @include($_GET[ 'file' ]);
-          echo"<div align='center'><b><h5>".$_GET[ 'file' ]."</h5></b></div> ";       
-        }
-      ?>
+<?php
+echo "</br></br>";
+if (isset($_GET['file'])) 
+{
+    // Lista blanca de archivos permitidos
+    $allowed_files = [
+        '1.php',
+        '2.php',
+    ];
+
+    // Sanitización del archivo solicitado
+    $requested_file = basename($_GET['file']); // Solo el nombre del archivo
+
+    // Validación contra la lista blanca
+    if (in_array($requested_file, $allowed_files)) {
+        include $requested_file;
+        echo "<div align='center'><b><h5>Archivo incluido: " . htmlspecialchars($requested_file) . "</h5></b></div>";
+    } else {
+        echo "<div align='center'><b><h5>Archivo no permitido o no encontrado.</h5></b></div>";
+    }
+} else {
+    echo "<div align='center'><b><h5>No se proporcionó ningún archivo.</h5></b></div>";
+}
+?>
    </body>
 </html>
 
