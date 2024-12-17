@@ -19,53 +19,52 @@
 	</form>
 	</div>
 <?php 
-    // Database connection variables
-    $servername = "localhost";
-    $username = "root";
-    $password = "your_secure_password_here"; // Set your database password
-    $db = "1ccb8097d0e9ce9f154608be60224c7c"; // Your database name
+// Include configuration file
+$config = require 'config.php';
 
-    // Create connection
-    $conn = mysqli_connect($servername, $username, $password, $db);
+// Get database credentials from config file
+$servername = $config['db_host'];
+$username   = $config['db_user'];
+$password   = $config['db_pass'];
+$db         = $config['db_name'];
 
-    // Check connection
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
+// Connect to the database
+$conn = new mysqli($servername, $username, $password, $db);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Check if the form has been submitted
+if (isset($_POST["submit"])) {
+    $firstname = trim($_POST["firstname"]);
 
     // Prepared statement to prevent SQL Injection
-    if (isset($_POST["submit"])) {
-        $firstname = $_POST["firstname"];
-
-        // Prepare the SQL query with placeholders
-        $stmt = $conn->prepare("SELECT lastname FROM users WHERE firstname = ?");
-        
-        // Bind the parameter to the prepared statement (s = string)
+    $stmt = $conn->prepare("SELECT lastname FROM users WHERE firstname = ?");
+    if ($stmt) {
         $stmt->bind_param("s", $firstname);
-        
-        // Execute the statement
         $stmt->execute();
-        
-        // Get the result of the query
         $result = $stmt->get_result();
 
-        // Check if any rows were returned
+        // Display results
         if ($result->num_rows > 0) {
-            // Output data of each row
-            while($row = $result->fetch_assoc()) {
-                echo $row["lastname"];
-                echo "<br>";
+            echo "<div align='center'><h3>Results:</h3>";
+            while ($row = $result->fetch_assoc()) {
+                echo htmlspecialchars($row["lastname"]) . "<br>";
             }
+            echo "</div>";
         } else {
-            echo "0 results";
+            echo "<div align='center'>No results found.</div>";
         }
-
-        // Close the prepared statement
         $stmt->close();
+    } else {
+        echo "Error in query preparation: " . $conn->error;
     }
+}
 
-    // Close the database connection
-    mysqli_close($conn);
+// Close the connection
+$conn->close();
 ?>
 </body>
 </html>
