@@ -31,14 +31,14 @@ if (isset($_GET["username"]) && isset($_GET["password"]))
       <label>Password:</label><br>
       <input align="center" type="password" name="password" value=""><br>
     <input align="center" type="submit" value="Submit">
-
     </form>
   </div>
   <div style="background-color:#ecf2d0;padding:20px;border-radius:0px 0px 20px 20px" align="center">
 <?php
 if (isset($_GET["username"]) && isset($_GET["password"])) {
-    $username = $_GET["username"];
-    $password = $_GET["password"];
+    $username = trim($_GET["username"]);
+    $password = trim($_GET["password"]);
+
     if ($username === "Admin" && $password === "ufoundmypassword") {
         echo "WELLDONE";
     } else {
