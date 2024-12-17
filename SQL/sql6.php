@@ -19,7 +19,7 @@
 	<!--Admin password is in the secret table. I hope, anyone doesn't see it.-->
 <?php
 // Incluir el archivo de configuración de credenciales
-$config = require 'config.php';
+$config = require_once 'config.php';
 
 // Obtener las credenciales de la base de datos
 $servername = $config['db_host'];
