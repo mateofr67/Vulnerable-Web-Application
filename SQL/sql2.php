@@ -20,40 +20,66 @@
 	</div>
 
 <?php
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$db = "1ccb8097d0e9ce9f154608be60224c7c";
+// Incluir el archivo de configuración con las credenciales
+$config = require 'config.php';
 
-	// Create connection
-	$conn = new mysqli($servername, $username, $password,$db);
+// Obtener las credenciales de la base de datos
+$servername = $config['db_host'];
+$username = $config['db_user'];
+$password = $config['db_pass'];
+$db = $config['db_name'];
 
-	// Check connection
-	if ($conn->connect_error) {
-	    die("Connection failed: " . $conn->connect_error);
-	} 
-	//echo "Connected successfully";
-	if(isset($_POST["submit"])){
-		$number = $_POST['number'];
-		$query = "SELECT bookname,authorname FROM books WHERE number = $number"; //Int
-		$result = mysqli_query($conn,$query);
+// Crear la conexión a la base de datos
+$conn = new mysqli($servername, $username, $password, $db);
 
-		if (!$result) { //Check result
-		    $message  = 'Invalid query: ' . mysql_error() . "\n";
-		    $message .= 'Whole query: ' . $query;
-		    die($message);
-		}
+// Verificar la conexión
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-		while ($row = mysqli_fetch_assoc($result)) {
-			echo "<hr>";
-		    echo $row['bookname']." ----> ".$row['authorname'];    
-		}
+// Verificar si el formulario fue enviado
+if (isset($_POST["submit"])) {
+    // Obtener el número de libro desde el formulario
+    $number = $_POST['number'];
 
-		if(mysqli_num_rows($result) <= 0)
-			echo "0 result";
-	}
+    // Verificar si el número es un entero válido
+    if (filter_var($number, FILTER_VALIDATE_INT)) {
+        // Consulta preparada para evitar SQL Injection
+        $stmt = $conn->prepare("SELECT bookname, authorname FROM books WHERE number = ?");
+        
+        if ($stmt) {
+            // Vincular el parámetro (i = entero)
+            $stmt->bind_param("i", $number);
 
-?> 
+            // Ejecutar la consulta
+            $stmt->execute();
+
+            // Obtener el resultado
+            $result = $stmt->get_result();
+
+            // Verificar si se encontraron resultados
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<hr>";
+                    echo $row['bookname'] . " ----> " . $row['authorname'];
+                }
+            } else {
+                echo "0 result";
+            }
+
+            // Cerrar la declaración
+            $stmt->close();
+        } else {
+            echo "Error en la preparación de la consulta: " . $conn->error;
+        }
+    } else {
+        echo "Por favor, ingrese un número de libro válido.";
+    }
+}
+
+// Cerrar la conexión
+$conn->close();
+?>
 
 </body>
 </html>
