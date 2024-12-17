@@ -22,7 +22,7 @@
 
 <?php
 // Incluir el archivo de configuración con las credenciales
-$config = require 'config.php';
+$config = require_once 'config.php';
 
 // Obtener las credenciales desde el archivo de configuración
 $servername = $config['db_host'];
