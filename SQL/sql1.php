@@ -20,7 +20,7 @@
 	</div>
 <?php 
 // Include configuration file
-$config = require 'config.php';
+$config = require_once 'config.php';
 
 // Get database credentials from config file
 $servername = $config['db_host'];
