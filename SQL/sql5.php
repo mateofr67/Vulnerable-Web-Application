@@ -45,10 +45,11 @@ if (isset($_POST["submit"])) {
     $number = $_POST['number'];
 
     // Evitar inyección SQL: Validación del número de entrada
-    if (preg_match("/[^0-9]/", $number)) {
-        echo "Invalid input. Please enter a valid number.";
-        exit;
-    }
+    if (preg_match("/\D/", $number)) {
+    echo "Invalid input. Please enter a valid number.";
+    exit;
+}
+
 
     // Usar una consulta preparada para prevenir la inyección SQL
     $stmt = $conn->prepare("SELECT bookname, authorname FROM books WHERE number = ?");
