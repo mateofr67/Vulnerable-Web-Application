@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head> 
 	<title>SQL Injection</title>
 	<link rel="shortcut icon" href="../Resources/hmbct.png" />
 </head>
