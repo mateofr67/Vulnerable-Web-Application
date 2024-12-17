@@ -1,7 +1,7 @@
 <?php
 if (isset($_GET["username"]) && isset($_GET["password"])) 
 {
-    $username = $_GET["username"];
+    $username = $_GET["username"]; 
     $password = $_GET["password"];
 
     if ($username === "Admin" && $password === "ufoundmypassword") {
